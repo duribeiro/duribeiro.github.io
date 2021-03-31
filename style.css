@@ -1,0 +1,139 @@
+* {
+  font-family: Montserrat, sans-serif;
+}
+
+.who_i_am {
+  margin-top: 150px;
+}
+
+.site_content {
+  margin-top: 50px;
+}
+
+body {
+  background-color: rgb(253, 251, 251);
+}
+
+#cabecalho {
+  background-color: rgb(29, 53, 87);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+#cabecalho h1 {
+  margin: 1%;
+}
+
+#titulo {
+  text-align: center;
+  color: rgb(244, 244, 244);
+  display: block;
+}
+
+#minha_foto {
+  height: 150px;
+  border: 3px solid rgb(29, 53, 87);
+  border-radius: 100%;
+}
+
+.h2_title {
+  background-color: rgb(29, 53, 87);
+  color: rgb(244, 244, 244);
+  padding: 2px 20px;
+  border-radius: 4px;
+}
+
+#rodape {
+  background-color: rgb(29, 53, 87);
+  color: rgb(244, 244, 244);
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+#footer_link {
+  color: rgb(244, 244, 244);
+  font-style: italic;
+  font-weight: 500;
+}
+
+#footer_link:hover {
+  text-decoration: underline;
+  background-color: rgb(244, 244, 244);
+  color: rgb(29, 53, 87);
+  transition: 400ms;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+div a {
+  text-decoration: none;
+  line-height: 0;
+}
+
+#menu {
+  text-align: center;
+}
+
+nav ul li a {
+  text-decoration: none;
+  background-color: rgba(69, 123, 157, 0.349);
+  color: rgb(244, 244, 244);
+  list-style: none;
+  padding: 3px 6px;
+}
+
+nav ul li > a:hover {
+  border-left: 3px solid rgb(230, 57, 70);
+  color: rgb(29, 53, 87);
+  background-color: rgb(244, 244, 244);
+}
+
+nav ul li > a:active {
+  border-left: 3px solid rgb(244, 244, 244);
+  color: rgb(244, 244, 244);
+  background-color: rgb(230, 57, 70);
+}
+
+nav ul {
+  margin: 13px;
+}
+
+div h4 {
+  font-size: 1em;
+  letter-spacing: 1px;
+}
+
+.lado-esquerdo {
+  width: 50%;
+  display: inline-block;
+  top: 0;
+
+}
+
+.lado-direito {
+  width: 40%;
+  display: inline-block;
+  margin-left: 60px;
+  padding: 7px;
+  background-color: rgba(69, 123, 157, 0.349);
+}
+
+table {
+  border-collapse: collapse;
+  width: 400px;
+}
+
+th , td {
+  text-align: center;
+  border: 1px solid rgb(29, 53, 87);
+}
+
+tr:nth-child( even ) {
+  background-color: rgba(69, 123, 157, 0.349);
+}
