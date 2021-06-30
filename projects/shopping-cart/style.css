@@ -74,10 +74,3 @@
   font-size: 16pt;
   text-align: center;
 }
-
-h1 , h2 {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  padding: auto;
-}
