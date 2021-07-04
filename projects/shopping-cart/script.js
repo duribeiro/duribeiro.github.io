@@ -2,11 +2,20 @@ const BASE_API = 'https://api.mercadolibre.com/sites/MLB/search?q=';
 const BASE_ITEM = 'https://api.mercadolibre.com/items';
 const sectionItens = document.querySelector('.items');
 const liItens = document.querySelector('.cart__items');
+const spanTotalPrice = document.querySelector('.total-price');
 
-const fetchApi = (item) => fetch(`${BASE_API}${item}`)
-  .then((response) => response.json())
-  .then((items) => items.results)
-  .catch((error) => error);
+const fetchApi = (item) => {
+  // Consultei o repositório do Cristiano lima como inspiração para resolução do requisito 7 sobre o loading antes do fetch https://github.com/tryber/sd-012-project-shopping-cart/pull/116
+  const loading = document.querySelector('.loading');
+  loading.innerText = 'Loading...';
+  return fetch(`${BASE_API}${item}`)
+    .then((response) => response.json())
+    .then((items) => {
+      loading.parentElement.removeChild(loading);
+      return items.results;
+    })
+    .catch((error) => error);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -35,15 +44,29 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 
 const setItemStorage = () => {
   localStorage.setItem('cart', liItens.innerHTML);
+  localStorage.setItem('total_price', spanTotalPrice.innerHTML);
 };
 
 const getItemStorage = () => {
   liItens.innerHTML = localStorage.getItem('cart');
+  const totalPrice = localStorage.getItem('total_price');
+  if (!totalPrice) {
+    spanTotalPrice.innerHTML = 0;
+  } else {
+    spanTotalPrice.innerHTML = totalPrice;
+  }
 };
 
 function removeItemCart() {
+  // consultei o repositório do Andre Moreno para resolver parte desta função https://github.com/tryber/sd-012-project-shopping-cart/pull/37
   liItens.addEventListener('click', (event) => {
     if (event.target.className === 'cart__item') {
+      const arrSplit = event.target.innerText.split('$');
+      const priceItemList = arrSplit[arrSplit.length - 1];
+      const totalPrice = document.querySelector('.total-price').innerText;
+      const sub = parseFloat(totalPrice) - priceItemList;
+      const subRound = Math.round(sub * 100) / 100;
+      spanTotalPrice.innerText = subRound;
       event.target.remove();
       setItemStorage();
     }
@@ -62,6 +85,18 @@ const fetchItemById = (id) => fetch(`${BASE_ITEM}/${id}`)
   .then((item) => item)
   .catch((error) => error);
 
+const sumPriceItensCart = (price = 0) => {
+  // Consultei documentaçãoo para entender sobre o Math.round https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Math/round
+  let totalPrice = localStorage.getItem('total_price');
+  if (typeof (totalPrice) !== 'string') {
+    console.log('ops, algum erro no local storage');
+    totalPrice = '0';
+  }
+  const sum = Math.round((parseFloat(totalPrice) + price) * 100) / 100;
+  localStorage.setItem('total_price', sum);
+  spanTotalPrice.innerText = `${sum}`;
+};
+
 function getIdFormProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -71,9 +106,11 @@ const creatItemList = () => {
   buttons.forEach((btn) => {
     btn.addEventListener('click', async (event) => {
       try {
-        const id = getIdFormProductItem(event.target.parentElement);
-        const data = await fetchItemById(id);
+        const idProduct = getIdFormProductItem(event.target.parentElement);
+        const data = await fetchItemById(idProduct);
         liItens.appendChild(createCartItemElement(data));
+        const { price } = data;
+        sumPriceItensCart(price);
         setItemStorage();
       } catch (error) {
         console.log(`o erro foi ${error}`);
@@ -82,9 +119,17 @@ const creatItemList = () => {
   });
 };
 
-// const sumPriceItensCart = () => {
-
-// }
+const emptyCart = () => {
+  const btnEmptyCart = document.querySelector('.empty-cart');
+  btnEmptyCart.addEventListener('click', () => {
+    const itemsCart = document.querySelectorAll('.cart__item');
+    itemsCart.forEach((item) => {
+      item.parentNode.removeChild(item);
+      spanTotalPrice.innerText = 0;
+      setItemStorage();
+    });
+  });
+};
 
 window.onload = () => {
   fetchApi('computador')
@@ -98,4 +143,5 @@ window.onload = () => {
 
   getItemStorage();
   removeItemCart();
+  emptyCart();
 };
